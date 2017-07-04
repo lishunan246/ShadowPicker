@@ -42,19 +42,24 @@ def main():
             p = subprocess.Popen(["ping", server], stdout=subprocess.PIPE)
             p_list.append(p)
 
+        tuples = []  # drop rate, response time, index, server name
+        i = 0
         for p in p_list:
             p.wait()
             out = p.stdout.read().decode("gbk").splitlines()
-            drop = out[-3]
-            avg = out[-1]
-            avg_ms = re.findall(r"(\d+)(?=ms)", avg)
-            drop_l = re.findall(r"(\d+)", drop)
-            print(avg)
-            print(avg_ms)
-            print(drop)
-            print(drop_l)
-            pass
-            pass
+            avg_ms = re.findall(r"(\d+)(?=ms)", out[-1])
+            drop_l = re.findall(r"(\d+)", out[-3])
+
+            tuples.append((int(drop_l[-1]), int(avg_ms[-1]), i, server_list[i]))
+            i += 1
+
+        ts = sorted(tuples)
+        if ts[0][2] != current_index:
+            terminate_ss()
+            update_config()
+            start_ss()
+
+        pass
 
 
 if __name__ == '__main__':

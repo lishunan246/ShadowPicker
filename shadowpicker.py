@@ -9,7 +9,7 @@ import psutil
 ss_program_name = "Shadowsocks.exe"
 ss_config_name = "gui-config.json"
 default_codec = "gbk"
-ping_times = 20
+ping_times = 10
 
 
 def get_process():
